@@ -20,7 +20,7 @@ else()
 endif()
 
 # Global UNIX CXX Flags
-if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     # Flags
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unknown-pragmas")
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-mismatched-tags")
@@ -47,6 +47,27 @@ if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND NOT(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.0))
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-register")
     endif()
+
+# clang-cl on windows
+elseif(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX -Wno-unused-parameter -Wno-unknown-pragmas")
+
+    if(NOT GCOV)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+    endif()
+
+    # TODO
+    if(ASAN)
+        MESSAGE("-- Compiling with ASAN")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi -fsanitize=address -shared-libasan")
+        set(LIBTRITON_KIND_LINK SHARED)
+    endif()
+
+    # no stack canary, no frame pointer
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GS- /Oy")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-register")
 endif()
 
 # 32-bits
@@ -253,7 +274,8 @@ if(PYTHON_BINDINGS)
     )
 
     execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
-    if(${CMAKE_SYSTEM_NAME} MATCHES "Windows" AND NOT ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" AND ${CMAKE_GENERATOR} MATCHES "Visual Studio")
+
+    if(${CMAKE_SYSTEM_NAME} MATCHES "Windows" AND ${CMAKE_GENERATOR} MATCHES "Visual Studio")
         install (FILES ${CMAKE_CURRENT_BINARY_DIR}/\${CMAKE_INSTALL_CONFIG_NAME}/triton${PYTHON_SUFFIX} DESTINATION ${PYTHON_SITE_PACKAGES})
     else()
         install (FILES ${CMAKE_CURRENT_BINARY_DIR}/triton${PYTHON_SUFFIX} DESTINATION ${PYTHON_SITE_PACKAGES})
