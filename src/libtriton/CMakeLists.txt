@@ -194,7 +194,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin"
     gen_syscall(64)
 else()
     add_custom_target(gen-syscall64
-      COMMAND echo "No syscall64 to extract on your plateform"
+      COMMAND echo "No syscall64 to extract on your platform"
     )
 endif()
 
@@ -203,7 +203,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     gen_syscall(32)
 else()
     add_custom_target(gen-syscall32
-      COMMAND echo "No syscall32 to extract on your plateform"
+      COMMAND echo "No syscall32 to extract on your platform"
     )
 endif()
 
@@ -253,7 +253,7 @@ if(PYTHON_BINDINGS)
     )
 
     execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
-    if(${CMAKE_SYSTEM_NAME} MATCHES "Windows" AND NOT ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
+    if(${CMAKE_SYSTEM_NAME} MATCHES "Windows" AND NOT ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" AND ${CMAKE_GENERATOR} MATCHES "Visual Studio")
         install (FILES ${CMAKE_CURRENT_BINARY_DIR}/\${CMAKE_INSTALL_CONFIG_NAME}/triton${PYTHON_SUFFIX} DESTINATION ${PYTHON_SITE_PACKAGES})
     else()
         install (FILES ${CMAKE_CURRENT_BINARY_DIR}/triton${PYTHON_SUFFIX} DESTINATION ${PYTHON_SITE_PACKAGES})
