@@ -109,9 +109,9 @@ namespace triton {
 
       //! Entry point python bindings (Py2/3).
       #if IS_PY3
-      TRITON_EXPORT PyMODINIT_FUNC PyInit_triton(void);
+      PyMODINIT_FUNC PyInit_triton(void);
       #else
-      TRITON_EXPORT PyMODINIT_FUNC inittriton(void);
+      PyMODINIT_FUNC inittriton(void);
       TRITON_EXPORT PyObject* PyInit_triton(void);
       #endif
 
