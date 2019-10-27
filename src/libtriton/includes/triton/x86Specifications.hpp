@@ -42,23 +42,23 @@ namespace triton {
 
       //! \class x86Specifications
       /*! \brief The x86Specifications class defines specifications about the x86 and x86_64 CPU */
-      class TRITON_EXPORT x86Specifications {
+      class x86Specifications {
         protected:
           //! List of registers specification available for this architecture.
           std::unordered_map<triton::arch::register_e, const triton::arch::Register> registers_;
 
         public:
           //! Constructor.
-          x86Specifications(triton::arch::architecture_e);
+          TRITON_EXPORT x86Specifications(triton::arch::architecture_e);
 
           //! Converts a capstone's register id to a triton's register id.
-          triton::arch::register_e capstoneRegisterToTritonRegister(triton::uint32 id) const;
+          TRITON_EXPORT triton::arch::register_e capstoneRegisterToTritonRegister(triton::uint32 id) const;
 
           //! Converts a capstone's instruction id to a triton's instruction id.
-          triton::uint32 capstoneInstructionToTritonInstruction(triton::uint32 id) const;
+          TRITON_EXPORT triton::uint32 capstoneInstructionToTritonInstruction(triton::uint32 id) const;
 
           //! Converts a capstone's prefix id to a triton's prefix id.
-          triton::arch::x86::prefix_e capstonePrefixToTritonPrefix(triton::uint32 id) const;
+          TRITON_EXPORT triton::arch::x86::prefix_e capstonePrefixToTritonPrefix(triton::uint32 id) const;
       };
 
       //! The list of opcodes.

@@ -107,11 +107,19 @@ namespace triton {
       //! Initializes the VERSION python namespace.
       TRITON_EXPORT void initVersionNamespace(PyObject* versionDict);
 
+      // workaround for the fact that PyMODINIT_FUNC also generates
+      // a declspec(dllexport) and we get a warning about duplication
+      #if _WIN32
+      #define TRITON_EXPORT_NO_WIN32
+      #else
+      #define TRITON_EXPORT_NO_WIN32 TRITON_EXPORT
+      #endif
+
       //! Entry point python bindings (Py2/3).
       #if IS_PY3
-      PyMODINIT_FUNC PyInit_triton(void);
+      PyMODINIT_FUNC TRITON_EXPORT_NO_WIN32 PyInit_triton(void);
       #else
-      PyMODINIT_FUNC inittriton(void);
+      PyMODINIT_FUNC TRITON_EXPORT_NO_WIN32 inittriton(void);
       TRITON_EXPORT PyObject* PyInit_triton(void);
       #endif
 
