@@ -13,7 +13,7 @@
 #include <vector>
 
 #include <triton/archEnums.hpp>
-#include <triton/dllexport.hpp>
+#include <triton/triton_export.h>
 #include <triton/instruction.hpp>
 #include <triton/memoryAccess.hpp>
 #include <triton/register.hpp>

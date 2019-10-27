@@ -15,7 +15,7 @@
 #include <triton/archEnums.hpp>
 #include <triton/callbacks.hpp>
 #include <triton/cpuInterface.hpp>
-#include <triton/dllexport.hpp>
+#include <triton/triton_export.h>
 #include <triton/instruction.hpp>
 #include <triton/memoryAccess.hpp>
 #include <triton/register.hpp>
@@ -49,7 +49,7 @@ namespace triton {
 
       //! \class x86Cpu
       /*! \brief This class is used to describe the x86 (32-bits) spec. */
-      class x86Cpu : public CpuInterface, public x86Specifications {
+      class TRITON_EXPORT x86Cpu : public CpuInterface, public x86Specifications {
 
         static const triton::arch::register_e pcId = triton::arch::ID_REG_X86_EIP;
         static const triton::arch::register_e spId = triton::arch::ID_REG_X86_ESP;
